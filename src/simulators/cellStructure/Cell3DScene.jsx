@@ -41,7 +41,11 @@ function scatteredPositions(count, radius, seed) {
 
 // The solid face revealed by the cut - without this, clipping just makes
 // half the cell disappear into a hollow void, which looks broken rather
-// than like a cross-section.
+// than like a cross-section. Sized generously (well past the plant
+// cell's box diagonal, ~5.0, not just the animal cell's sphere radius)
+// so no clipped geometry pokes out past its edge.
+const CAP_RADIUS = 6.5;
+
 function CutFace({ color }) {
   const quaternion = useMemo(() => {
     const q = new THREE.Quaternion();
@@ -53,8 +57,8 @@ function CutFace({ color }) {
     <group quaternion={quaternion} position={[0, 0, 0]}>
       {/* the solid cut surface itself */}
       <mesh position={[0, 0, -0.01]}>
-        <circleGeometry args={[CELL_RADIUS + 1.4, 64]} />
-        <meshStandardMaterial color="#212c31" roughness={0.85} side={THREE.DoubleSide} />
+        <circleGeometry args={[CAP_RADIUS, 64]} />
+        <meshStandardMaterial color="#2f3d44" roughness={0.85} side={THREE.DoubleSide} />
       </mesh>
       {/* a thin bright ring tracing the cut edge of the outer membrane/wall */}
       <mesh position={[0, 0, 0]}>
